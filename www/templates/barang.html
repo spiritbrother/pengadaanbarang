@@ -1,0 +1,19 @@
+<ion-view style="" class=" " id="page1" title="Barang">
+  <ion-nav-buttons side="secondary">
+        <div class="button" ng-click="doSomething()">
+        permintaan <i class="ion-plus-circled"></i>
+      </div>
+      </ion-nav-buttons>
+  <ion-content class="has-header" padding="true">
+    <center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
+
+
+    <div class="card"  ng-repeat="item in items" on-tap="onTap(item)" >
+<ion-item href="" class="item item-text-wrap" >
+        <h2>{{item.kode_barang}}</h2>
+    <p>{{item.nama_barang}}</p>
+    <p>{{item.tanggal_akhir}}</p>
+  </ion-item>
+</div>
+  </ion-content>
+</ion-view>
