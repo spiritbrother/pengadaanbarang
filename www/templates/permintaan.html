@@ -1,3 +1,36 @@
 <ion-view style="" class=" " id="page2" title="Permintaan">
-    <ion-content class="has-header" padding="true"></ion-content>
+    <ion-content class="has-header" padding="true" overflow-scroll="false" has-bouncing="true">
+      <center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
+      <form style="" class="list" ng-hide="ilang">
+          <label style="" name="kode" class="item item-select">
+              <h3>Kode Barang</h3>
+              <select ng-model="kodebarang" ng-change="select(kodebarang)">
+            <option ng-repeat="item in items" value="{{item.kode_barang}}">{{item.kode_barang}}</option>
+          </select>
+            </label>
+            <label style="" name="penempatan" class="item item-input">
+                <h3>Penempatan</h3>
+            <span >{{tempat}}</span>
+              </label>
+
+            <label style="" name="jumlahSaldo" class="item item-input">
+                <h3>Jumlah Saldo</h3>
+
+                <span >{{jumlahsaldo}}</span>
+            </label>
+            <label style="" name="jumlahPermintaan" class="item item-input">
+                <h3>Jumlah Permintaan</h3>
+              <span>   1<span>
+            </label>
+            <h3 style="color: rgb(0, 0, 0);" id="permintaan-heading1">keterangan</h3>
+
+                <label style="" name="keterangan" class="item item-input">
+             <textarea ng-model="$parent.keterangan"></textarea>
+                  </label>
+
+<button class="button button-balanced  button-block" id="permintaan-button6" ng-click="tambah()">Tambah Permintaan</button>
+        </form>
+
+
+      </ion-content>
 </ion-view>
