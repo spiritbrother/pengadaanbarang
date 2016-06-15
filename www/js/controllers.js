@@ -38,7 +38,7 @@ $state.go("menu.infobarang",{obj: item.kode_barang})
 }
 })
 
-.controller('permintaanCtrl', function($scope,$http,$state,$ionicHistory) {
+.controller('permintaanCtrl', function($scope,$http,$state,$ionicHistory,$ionicLoading) {
 $scope.tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
 $scope.ilang=true;
 $scope.select = function(kodebarang) {
@@ -54,7 +54,7 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
   params: {penempatan: JSON.parse(window.localStorage.getItem("profile"))[0].nama}
 }).then(function successCallback(response) {
   $scope.items=response.data;
-    $http.get('http://plokotok.16mb.com/pandamonium.php', {params: {penempatan: tempat,jenis: "permintaan"}}).then(
+    $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "permintaan"}}).then(
     function(panda){$scope.jumlahsaldo=response.data.length-panda.data.length; console.log(panda.data); $scope.ilang=false;},function(response){}
   )
     }, function errorCallback(response) {
@@ -63,7 +63,10 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
     $scope.tambah=function(){
       if($scope.jumlahsaldo != 0 ){
         if($scope.kodebarang != null)
-        $http.get('http://plokotok.16mb.com/insertpermintaan.php', {params: {penempatan: tempat,kode_barang: $scope.kodebarang,jumlah_saldo: $scope.jumlahsaldo,jumlah_permintaan: 1,keterangan: $scope.keterangan,tanggal: tanggal}})
+        $ionicLoading.show({
+     template: 'Sedang memproses permintaan anda'
+   })
+        $http.get('http://plokotok.16mb.com/insertpermintaan.php', {params: {penempatan: tempat,kode_barang: $scope.kodebarang,jumlah_saldo: $scope.jumlahsaldo,jumlah_permintaan: 1,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
         .then(function(response){
           console.log(response.data)
           var kimbo=response.data;
@@ -74,14 +77,15 @@ $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: ki
     disableAnimate: false,
     disableBack: true
   });
-  $state.go("menu.barang")},function(response){})
+  $ionicLoading.hide();
+  $state.go("menu.notifikasikeluar")},function(response){})
         },function(response){})
       }else{alert("maaf,saldo anda tidak mencukupi untuk permintaan baru")}
     }
     //endang
 })
 
-.controller('laporanCtrl', function($scope,$http,$stateParams,$ionicHistory,$state) {
+.controller('laporanCtrl', function($scope,$http,$stateParams,$ionicHistory,$state,$ionicLoading) {
   $scope.kondisi = [
      { text: "Layak", value: "layak" },
      { text: "Tidak Layak", value: "tidak layak" },
@@ -97,10 +101,11 @@ $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: ki
     var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).slice(-2)+"-"+("0"+new Date().getDate()).slice(-2);
       $scope.laporan=function(){
     if($scope.data.kondisi != '' ){
-      console.log($scope.data.kondisi)
-      $http.get('http://plokotok.16mb.com/insertlaporan.php', {params: {penempatan: $scope.penempatan,kode_barang: $scope.kode_barang,kondisi: $scope.data.kondisi,username_pengirim: username ,keterangan: $scope.keterangan,tanggal: tanggal}})
+      $ionicLoading.show({
+   template: 'Sedang memproses laporan anda'
+ })
+      $http.get('http://plokotok.16mb.com/insertlaporan.php', {params: {penempatan: $scope.penempatan,kode_barang: $scope.kode_barang,kondisi: $scope.data.kondisi,username_pengirim: username ,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
       .then(function(response){
-console.log(response.data)
         var kimbo=response.data;
         var cam=response.data.length-1;
 $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kodebarang,jenis: "laporan",tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
@@ -111,7 +116,8 @@ $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: 
     disableAnimate: false,
     disableBack: true
   });
-$state.go("menu.barang")
+  $ionicLoading.hide()
+$state.go("menu.notifikasikeluar")
 }
     },function(response){})
 },function(response){})
@@ -166,16 +172,7 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
 var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
 $scope.onTap=function(item){
   switch(item.jenis.substring(0,8).trim()) {
-    case "perminta":
-    if(item.status==0){
-      $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
-      .then(function(response){if(response.data.indexOf("berhasil") > -1){
-        $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "permintaan",id: item.idtabel} })
-      }
-          },function(response){})
-    }else{$state.go("menu.infopermintaandanjawaban",{obj: {tabel: "permintaan",id: item.idtabel} })}
-          break;
-    case "jawaban":
+      case "jawaban":
         if(item.status==0){
           $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
           .then(function(response){if(response.data.indexOf("berhasil") > -1){
@@ -194,24 +191,17 @@ $scope.onTap=function(item){
               $state.go("menu.laporan",{obj: {kode_barang: item.kode_barang,penempatan: item.penempatan,id:item.id}});
             }else{$state.go("menu.infopermintaandanjawaban",{obj: {tabel: "barang",id: item.idtabel} })}
           break;
-          case "laporan":
-              if(item.status==0){
-                $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
-                .then(function(response){if(response.data.indexOf("berhasil") > -1){
-                  $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "laporan_to_admin",id: item.idtabel} })
-                }
-                    },function(response){})
-              }else{$state.go("menu.infopermintaandanjawaban",{obj: {tabel: "laporan_to_admin",id: item.idtabel} })}
-            break;
+
 }
 }
+$scope.ilang=true;
 var a=[];
 var b=[];
 var c=[];
 $scope.tanggalakhir=[];
 //mendapatkan tabel history notifikasi
 $http.get('http://plokotok.16mb.com/semua.php', {params: {penempatan: tempat}})
-.then(function(response){$scope.tanggalakhir=response.data.reverse();
+.then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false;
     },function(response){})
 
 //notifikasi tanggal akhir
@@ -231,7 +221,7 @@ if(response.data.length!=0){
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
 
-        $http.get('http://plokotok.16mb.com/pandamonium.php', {params: {penempatan: tempat,jenis: "berakhir"}})
+        $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "berakhir"}})
     .then(function(response){console.log(response.data)
       var berakhir = a.filter(function(current){
           return response.data.filter(function(current_b){
@@ -266,7 +256,7 @@ if(response.data.length!=0){
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
 
-        $http.get('http://plokotok.16mb.com/pandamonium.php', {params: {penempatan: tempat,jenis: "service"}})
+        $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "service"}})
     .then(function(response){console.log(response.data)
       var berakhir = b.filter(function(current){
           return response.data.filter(function(current_b){
@@ -301,7 +291,7 @@ if(response.data.length!=0){
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
 
-        $http.get('http://plokotok.16mb.com/pandamonium.php', {params: {penempatan: tempat,jenis: "jawaban"}})
+        $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "jawaban"}})
     .then(function(response){console.log(response.data)
       var berakhir = c.filter(function(current){
           return response.data.filter(function(current_b){
@@ -392,4 +382,42 @@ $state.go("menu.barang")
     }else{alert("maaf,anda belum memilih kondisi")}
   }
   //endang
+})
+.controller('notifikasikeluar',function($scope,$state,$http){
+
+  $scope.konversitanggal=function(tanggal) {
+    var today = new Date(Date.parse(tanggal));
+    var custom_months = [ "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
+    var custom_days = [  "Minggu", "Senin" ,"Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"  ];
+    var date = custom_days[ today.getDay() ]+" ,"+today.getDate() + "-" + custom_months[ today.getMonth() ] +"-" + today.getFullYear() ;
+    return  date;
+}
+$scope.ilang=true;
+var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).slice(-2)+"-"+("0"+new Date().getDate()).slice(-2);
+  var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
+  $http.get('http://plokotok.16mb.com/notifikasikeluar.php', {params: {penempatan: tempat}})
+  .then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false;
+      },function(response){})
+  $scope.onTap=function(item){
+    switch(item.jenis.substring(0,8).trim()) {
+      case "perminta":
+      if(item.status==0){
+        $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
+        .then(function(response){if(response.data.indexOf("berhasil") > -1){
+          $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "permintaan",id: item.idtabel} })
+        }
+            },function(response){})
+      }else{$state.go("menu.infopermintaandanjawaban",{obj: {tabel: "permintaan",id: item.idtabel} })}
+            break;
+            case "laporan":
+                if(item.status==0){
+                  $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
+                  .then(function(response){if(response.data.indexOf("berhasil") > -1){
+                    $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "laporan_to_admin",id: item.idtabel} })
+                  }
+                      },function(response){})
+                }else{$state.go("menu.infopermintaandanjawaban",{obj: {tabel: "laporan_to_admin",id: item.idtabel} })}
+              break;
+        }}
+          //endang
 })

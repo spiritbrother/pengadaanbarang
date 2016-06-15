@@ -52,6 +52,15 @@ angular.module('app.routes', [])
       }
     }
   })
+  .state('menu.notifikasikeluar', {
+    url: '/notifikasikeluar',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/notifikasikeluar.html',
+        controller: 'notifikasikeluar'
+      }
+    }
+  })
   .state('menu.editlaporan', {
     url: '/editlaporan',
     views: {

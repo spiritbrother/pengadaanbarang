@@ -5,13 +5,10 @@
 .jawaban0{background-color: yellow;color: black;}
 .service0{background-color: blue;color: white;}
 .laporan0{background-color: black;color: white;}
-
 </style>
-
     <ion-content class="has-header " padding="true" overflow-scroll="false" has-bouncing="true">
-
-  <center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
-      <div class="card" ng-repeat="tanggal in tanggalakhir"  >
+      <center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
+      <div class="card" ng-repeat="tanggal in tanggalakhir" style="" >
         <div class="item item-divider {{tanggal.jenis.substring(0,8).trim()+tanggal.status}}">
           {{tanggal.jenis}}
         </div>
@@ -19,7 +16,6 @@
           {{tanggal.kode_barang}}<br><br>
           <h3>{{konversitanggal(tanggal.tanggal)}}</h3>
         </ion-item>
-      </div>
-
+        </div>
     </ion-content>
 </ion-view>
