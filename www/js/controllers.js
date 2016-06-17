@@ -1,7 +1,21 @@
 angular.module('app.controllers', [])
-.controller('menu',function($scope,$ionicModal,$http,$rootScope,$state,$ionicHistory){
+.controller('jumlahnotifikasimasuk',function($scope,$ionicModal,$http,$rootScope,$state,$ionicHistory){
+var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
   function notif(){
-  $http.get('http://plokotok.16mb.com/jumlahnotifikasi.php')
+  $http.get('http://plokotok.16mb.com/jumlahnotifikasi.php',{params:{penempatan: tempat }})
+  .then(function(response){$scope.jumlah=response.data[0].jumlah;aksi()
+      },function(response){})}
+      function aksi(){
+        notif()
+      }
+    aksi()
+  //endang
+})
+.controller('jumlahnotifikasikeluar',function($scope,$ionicModal,$http,$rootScope,$state,$ionicHistory){
+var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
+$scope.tempat=tempat
+  function notif(){
+  $http.get('http://plokotok.16mb.com/jumlahnotifikasikeluar.php',{params:{penempatan: tempat }})
   .then(function(response){$scope.jumlah=response.data[0].jumlah;aksi()
       },function(response){})}
       function aksi(){
@@ -17,17 +31,20 @@ window.localStorage.removeItem("profile");
     $state.go("login");
   }
   $scope.ilang=true;
+  $scope.refresh=function (){
     $http({
     method: 'GET',
     url: 'http://plokotok.16mb.com/barang.php',
     params: {penempatan: JSON.parse(window.localStorage.getItem("profile"))[0].nama}
   }).then(function successCallback(response) {
     $scope.items=response.data;
-
     $scope.ilang=false;
+ $scope.$broadcast('scroll.refreshComplete');
     }, function errorCallback(response) {
-      console.log(response)
-      });
+      alert("tidak ada data barang")
+       $scope.$broadcast('scroll.refreshComplete');
+      });}
+      $scope.refresh()
 $scope.onTap=function(item){
   // alert(item.kode_barang+"panda");
   $ionicHistory.nextViewOptions({
@@ -61,7 +78,7 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
     console.log(response)
     });
     $scope.tambah=function(){
-      if($scope.jumlahsaldo != 0 ){
+      if($scope.jumlahsaldo > 0 ){
         if($scope.kodebarang != null)
         $ionicLoading.show({
      template: 'Sedang memproses permintaan anda'
@@ -80,7 +97,7 @@ $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: ki
   $ionicLoading.hide();
   $state.go("menu.notifikasikeluar")},function(response){})
         },function(response){})
-      }else{alert("maaf,saldo anda tidak mencukupi untuk permintaan baru")}
+      }else{$ionicLoading.hide();alert("maaf,saldo anda tidak mencukupi untuk permintaan baru")}
     }
     //endang
 })
@@ -122,12 +139,12 @@ $state.go("menu.notifikasikeluar")
     },function(response){})
 },function(response){})
       },function(response){})
-    }else{alert("maaf,anda belum memilih kondisi")}
+    }else{$ionicLoading.hide();alert("maaf,anda belum memilih kondisi");}
   }
   //endang
 })
 
-.controller('loginCtrl', function($scope,$state,$http,$ionicHistory,$ionicNavBarDelegate) {
+.controller('loginCtrl', function($scope,$state,$http,$ionicHistory,$ionicNavBarDelegate,$ionicLoading) {
 if(window.localStorage.getItem("profile") != null){$state.go("menu.barang",{},{reload: true})}
 
 $ionicHistory.nextViewOptions({
@@ -138,7 +155,9 @@ $scope.data={}
 
 $scope.panda=function(){
 $ionicHistory.clearHistory();
-
+$ionicLoading.show({
+template: 'Tunggu sedang login...'
+})
   $http({
   method: 'GET',
   url: "http://plokotok.16mb.com/login.php",
@@ -149,18 +168,23 @@ $ionicHistory.clearHistory();
   if(response.data.error != "error"){
    window.localStorage.setItem("profile", JSON.stringify(response.data));
    console.log(JSON.parse(window.localStorage.getItem("profile")));
-
+$ionicLoading.hide()
 $state.go("menu.barang");
  }
-   else{alert("username atau password anda salah")}
+   else{
+$ionicLoading.hide()
+     alert("username atau password anda salah")}
   }, function errorCallback(response) {
+    $ionicLoading.hide()
           alert("koneksi atau request error");
     });
   //
 }
 })
 
-.controller('notifikasiCtrl', function($scope,$http,$state) {
+.controller('notifikasiCtrl', function($scope,$http,$state,$ionicPopup) {
+//console.log(angular.element("notifikasi"))
+
   $scope.konversitanggal=function(tanggal) {
     var today = new Date(Date.parse(tanggal));
     var custom_months = [ "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
@@ -199,11 +223,12 @@ var a=[];
 var b=[];
 var c=[];
 $scope.tanggalakhir=[];
+
 //mendapatkan tabel history notifikasi
 $http.get('http://plokotok.16mb.com/semua.php', {params: {penempatan: tempat}})
 .then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false;
     },function(response){})
-
+$scope.refresh=function(){
 //notifikasi tanggal akhir
 $http.get('http://plokotok.16mb.com/cektanggalakhir.php', {params: {penempatan: tempat,tanggal_akhir: tanggal }})
 .then(function(response){
@@ -215,12 +240,12 @@ if(response.data.length!=0){
   $http.get('http://plokotok.16mb.com/historytanggalakhir.php', {params: {penempatan: tempat }})
   .then(function(response){
   if(response.data.length==0){
-
+ $scope.$broadcast('scroll.refreshComplete');
     angular.forEach(a,function(value){
       $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
-
+ $scope.$broadcast('scroll.refreshComplete');
         $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "berakhir"}})
     .then(function(response){console.log(response.data)
       var berakhir = a.filter(function(current){
@@ -250,12 +275,12 @@ if(response.data.length!=0){
   $http.get('http://plokotok.16mb.com/historytanggalservice.php', {params: {penempatan: tempat }})
   .then(function(response){
   if(response.data.length==0){
-
+ $scope.$broadcast('scroll.refreshComplete');
     angular.forEach(b,function(value){
       $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
-
+ $scope.$broadcast('scroll.refreshComplete');
         $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "service"}})
     .then(function(response){console.log(response.data)
       var berakhir = b.filter(function(current){
@@ -285,12 +310,12 @@ if(response.data.length!=0){
   $http.get('http://plokotok.16mb.com/historyjawaban.php', {params: {penempatan: tempat }})
   .then(function(response){
   if(response.data.length==0){
-
+ $scope.$broadcast('scroll.refreshComplete');
     angular.forEach(c,function(value){
       $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
-
+ $scope.$broadcast('scroll.refreshComplete');
         $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "jawaban"}})
     .then(function(response){console.log(response.data)
       var berakhir = c.filter(function(current){
@@ -308,7 +333,8 @@ if(response.data.length!=0){
   }
   },function(response){});
 }
-},function(response){});
+},function(response){});}
+$scope.refresh()
 //endang
 
 
@@ -395,9 +421,11 @@ $state.go("menu.barang")
 $scope.ilang=true;
 var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).slice(-2)+"-"+("0"+new Date().getDate()).slice(-2);
   var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
+  $scope.refresh=function(){
   $http.get('http://plokotok.16mb.com/notifikasikeluar.php', {params: {penempatan: tempat}})
-  .then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false;
-      },function(response){})
+  .then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false; $scope.$broadcast('scroll.refreshComplete');
+      },function(response){})}
+      $scope.refresh();
   $scope.onTap=function(item){
     switch(item.jenis.substring(0,8).trim()) {
       case "perminta":

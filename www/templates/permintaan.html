@@ -1,12 +1,15 @@
 <ion-view style="" class=" " id="page2" title="Permintaan">
+
     <ion-content class="has-header" padding="true" overflow-scroll="false" has-bouncing="true">
       <center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
       <form style="" class="list" ng-hide="ilang">
           <label style="" name="kode" class="item item-select">
               <h3>Kode Barang</h3>
+               <div class="input-field col s12">
               <select ng-model="kodebarang" ng-change="select(kodebarang)">
             <option ng-repeat="item in items" value="{{item.kode_barang}}">{{item.kode_barang}}</option>
           </select>
+        </div>
             </label>
             <label style="" name="penempatan" class="item item-input">
                 <h3>Penempatan</h3>
