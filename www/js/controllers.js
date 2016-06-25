@@ -78,8 +78,8 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
     console.log(response)
     });
     $scope.tambah=function(){
-      if($scope.jumlahsaldo > 0 ){
-        if($scope.kodebarang != null)
+      if($scope.jumlahsaldo > 0  ){
+if( $scope.kodebarang != null){
         $ionicLoading.show({
      template: 'Sedang memproses permintaan anda'
    })
@@ -96,7 +96,7 @@ $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: ki
   });
   $ionicLoading.hide();
   $state.go("menu.notifikasikeluar")},function(response){})
-        },function(response){})
+        },function(response){})}else{$ionicLoading.hide();alert("kode barang tidak boleh kosong")}
       }else{$ionicLoading.hide();alert("maaf,saldo anda tidak mencukupi untuk permintaan baru")}
     }
     //endang
