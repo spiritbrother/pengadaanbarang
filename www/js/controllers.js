@@ -2,7 +2,7 @@ angular.module('app.controllers', [])
 .controller('jumlahnotifikasimasuk',function($scope,$ionicModal,$http,$rootScope,$state,$ionicHistory){
 var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
   function notif(){
-  $http.get('http://plokotok.16mb.com/jumlahnotifikasi.php',{params:{penempatan: tempat }})
+  $http.get('http://localhost/pengadaanperalatan/webservice/jumlahnotifikasi.php',{params:{penempatan: tempat }})
   .then(function(response){$scope.jumlah=response.data[0].jumlah;aksi()
       },function(response){})}
       function aksi(){
@@ -15,7 +15,7 @@ var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
 var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
 $scope.tempat=tempat
   function notif(){
-  $http.get('http://plokotok.16mb.com/jumlahnotifikasikeluar.php',{params:{penempatan: tempat }})
+  $http.get('http://localhost/pengadaanperalatan/webservice/jumlahnotifikasikeluar.php',{params:{penempatan: tempat }})
   .then(function(response){$scope.jumlah=response.data[0].jumlah;aksi()
       },function(response){})}
       function aksi(){
@@ -34,7 +34,7 @@ window.localStorage.removeItem("profile");
   $scope.refresh=function (){
     $http({
     method: 'GET',
-    url: 'http://plokotok.16mb.com/barang.php',
+    url: 'http://localhost/pengadaanperalatan/webservice/barang.php',
     params: {penempatan: JSON.parse(window.localStorage.getItem("profile"))[0].nama}
   }).then(function successCallback(response) {
     $scope.items=response.data;
@@ -67,11 +67,11 @@ var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
 var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).slice(-2)+"-"+("0"+new Date().getDate()).slice(-2);
   $http({
   method: 'GET',
-  url: 'http://plokotok.16mb.com/barang.php',
+  url: 'http://localhost/pengadaanperalatan/webservice/barang.php',
   params: {penempatan: JSON.parse(window.localStorage.getItem("profile"))[0].nama}
 }).then(function successCallback(response) {
   $scope.items=response.data;
-    $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "permintaan"}}).then(
+    $http.get('http://localhost/pengadaanperalatan/webservice/pembeda.php', {params: {penempatan: tempat,jenis: "permintaan"}}).then(
     function(panda){$scope.jumlahsaldo=response.data.length-panda.data.length; console.log(panda.data); $scope.ilang=false;},function(response){}
   )
     }, function errorCallback(response) {
@@ -83,12 +83,12 @@ if( $scope.kodebarang != null){
         $ionicLoading.show({
      template: 'Sedang memproses permintaan anda'
    })
-        $http.get('http://plokotok.16mb.com/insertpermintaan.php', {params: {penempatan: tempat,kode_barang: $scope.kodebarang,jumlah_saldo: $scope.jumlahsaldo,jumlah_permintaan: 1,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
+        $http.get('http://localhost/pengadaanperalatan/webservice/insertpermintaan.php', {params: {penempatan: tempat,kode_barang: $scope.kodebarang,jumlah_saldo: $scope.jumlahsaldo,jumlah_permintaan: 1,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
         .then(function(response){
           console.log(response.data)
           var kimbo=response.data;
           var cam=response.data.length-1;
-$http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kode_barang,jenis: "permintaan",tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
+$http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kode_barang,jenis: "permintaan",tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
 .then(function(response){console.log(response.data);
   $ionicHistory.nextViewOptions({
     disableAnimate: false,
@@ -121,13 +121,13 @@ $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: ki
       $ionicLoading.show({
    template: 'Sedang memproses laporan anda'
  })
-      $http.get('http://plokotok.16mb.com/insertlaporan.php', {params: {penempatan: $scope.penempatan,kode_barang: $scope.kode_barang,kondisi: $scope.data.kondisi,username_pengirim: username ,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
+      $http.get('http://localhost/pengadaanperalatan/webservice/insertlaporan.php', {params: {penempatan: $scope.penempatan,kode_barang: $scope.kode_barang,kondisi: $scope.data.kondisi,username_pengirim: username ,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
       .then(function(response){
         var kimbo=response.data;
         var cam=response.data.length-1;
-$http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kodebarang,jenis: "laporan",tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
+$http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kodebarang,jenis: "laporan",tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
 .then(function(response){console.log(response.data);
-$http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: $scope.idhistory }})
+$http.get('http://localhost/pengadaanperalatan/webservice/update.php', {params: {tabel: "history",id: $scope.idhistory }})
 .then(function(response){if(response.data.indexOf("berhasil") > -1){
   $ionicHistory.nextViewOptions({
     disableAnimate: false,
@@ -160,7 +160,7 @@ template: 'Tunggu sedang login...'
 })
   $http({
   method: 'GET',
-  url: "http://plokotok.16mb.com/login.php",
+  url: "http://localhost/pengadaanperalatan/webservice/login.php",
   params: {username: $scope.data.username , password: $scope.data.password}
 }).then(function successCallback(response) {
 //  $cookies.put('user', response.data.user_lapangan);
@@ -198,7 +198,7 @@ $scope.onTap=function(item){
   switch(item.jenis.substring(0,8).trim()) {
       case "jawaban":
         if(item.status==0){
-          $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
+          $http.get('http://localhost/pengadaanperalatan/webservice/update.php', {params: {tabel: "history",id: item.id}})
           .then(function(response){if(response.data.indexOf("berhasil") > -1){
             $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "laporan_to_user",id: item.idtabel} })
           }
@@ -225,28 +225,28 @@ var c=[];
 $scope.tanggalakhir=[];
 
 //mendapatkan tabel history notifikasi
-$http.get('http://plokotok.16mb.com/semua.php', {params: {penempatan: tempat}})
+$http.get('http://localhost/pengadaanperalatan/webservice/semua.php', {params: {penempatan: tempat}})
 .then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false;
     },function(response){})
 $scope.refresh=function(){
 //notifikasi tanggal akhir
-$http.get('http://plokotok.16mb.com/cektanggalakhir.php', {params: {penempatan: tempat,tanggal_akhir: tanggal }})
+$http.get('http://localhost/pengadaanperalatan/webservice/cektanggalakhir.php', {params: {penempatan: tempat,tanggal_akhir: tanggal }})
 .then(function(response){
 if(response.data.length!=0){
   angular.forEach(response.data,function(value){
     a.push({penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: "berakhir",tanggal: tanggal, idtabel: value.ID, status: "0" })
   })
 
-  $http.get('http://plokotok.16mb.com/historytanggalakhir.php', {params: {penempatan: tempat }})
+  $http.get('http://localhost/pengadaanperalatan/webservice/historytanggalakhir.php', {params: {penempatan: tempat }})
   .then(function(response){
   if(response.data.length==0){
  $scope.$broadcast('scroll.refreshComplete');
     angular.forEach(a,function(value){
-      $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
+      $http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
  $scope.$broadcast('scroll.refreshComplete');
-        $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "berakhir"}})
+        $http.get('http://localhost/pengadaanperalatan/webservice/pembeda.php', {params: {penempatan: tempat,jenis: "berakhir"}})
     .then(function(response){console.log(response.data)
       var berakhir = a.filter(function(current){
           return response.data.filter(function(current_b){
@@ -255,7 +255,7 @@ if(response.data.length!=0){
       });
       angular.forEach(berakhir,function(value){
         $scope.tanggalakhir.unshift(value);
-        $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
+        $http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
         .then(function(response){console.log(response) },function(response){}); })
 
      },function(response){console.log(response)})
@@ -265,23 +265,23 @@ if(response.data.length!=0){
 }
 },function(response){});
 //notifikasi tanggal service
-$http.get('http://plokotok.16mb.com/cektanggalservice.php', {params: {penempatan: tempat,tanggal_service: tanggal }})
+$http.get('http://localhost/pengadaanperalatan/webservice/cektanggalservice.php', {params: {penempatan: tempat,tanggal_service: tanggal }})
 .then(function(response){
 if(response.data.length!=0){
   angular.forEach(response.data,function(value){
     b.push({penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: "service",tanggal: tanggal, idtabel: value.ID, status: "0" })
   })
 
-  $http.get('http://plokotok.16mb.com/historytanggalservice.php', {params: {penempatan: tempat }})
+  $http.get('http://localhost/pengadaanperalatan/webservice/historytanggalservice.php', {params: {penempatan: tempat }})
   .then(function(response){
   if(response.data.length==0){
  $scope.$broadcast('scroll.refreshComplete');
     angular.forEach(b,function(value){
-      $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
+      $http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
  $scope.$broadcast('scroll.refreshComplete');
-        $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "service"}})
+        $http.get('http://localhost/pengadaanperalatan/webservice/pembeda.php', {params: {penempatan: tempat,jenis: "service"}})
     .then(function(response){console.log(response.data)
       var berakhir = b.filter(function(current){
           return response.data.filter(function(current_b){
@@ -290,7 +290,7 @@ if(response.data.length!=0){
       });
       angular.forEach(berakhir,function(value){
         $scope.tanggalakhir.unshift(value);
-        $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
+        $http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
         .then(function(response){console.log(response) },function(response){}); })
 
      },function(response){console.log(response)})
@@ -300,23 +300,23 @@ if(response.data.length!=0){
 }
 },function(response){});
 //notifikasi jawaban
-$http.get('http://plokotok.16mb.com/cekjawaban.php', {params: {penempatan: tempat,tanggal: tanggal }})
+$http.get('http://localhost/pengadaanperalatan/webservice/cekjawaban.php', {params: {penempatan: tempat,tanggal: tanggal }})
 .then(function(response){
 if(response.data.length!=0){
   angular.forEach(response.data,function(value){
     c.push({penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: "jawaban "+value.jawab,tanggal: tanggal, idtabel: value.ID, status: "0" })
   })
 
-  $http.get('http://plokotok.16mb.com/historyjawaban.php', {params: {penempatan: tempat }})
+  $http.get('http://localhost/pengadaanperalatan/webservice/historyjawaban.php', {params: {penempatan: tempat }})
   .then(function(response){
   if(response.data.length==0){
  $scope.$broadcast('scroll.refreshComplete');
     angular.forEach(c,function(value){
-      $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
+      $http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
       .then(function(response){console.log(response) },function(response){}); })
   }else if(response.data.length!=0){
  $scope.$broadcast('scroll.refreshComplete');
-        $http.get('http://plokotok.16mb.com/pembeda.php', {params: {penempatan: tempat,jenis: "jawaban"}})
+        $http.get('http://localhost/pengadaanperalatan/webservice/pembeda.php', {params: {penempatan: tempat,jenis: "jawaban"}})
     .then(function(response){console.log(response.data)
       var berakhir = c.filter(function(current){
           return response.data.filter(function(current_b){
@@ -325,7 +325,7 @@ if(response.data.length!=0){
       });
       angular.forEach(berakhir,function(value){
         $scope.tanggalakhir.unshift(value);
-        $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
+        $http.get('http://localhost/pengadaanperalatan/webservice/inserthistory.php', {params: {penempatan: value.penempatan,kode_barang: value.kode_barang,jenis: value.jenis,tanggal: value.tanggal, idtabel: value.idtabel, status: parseInt(value.status) }})
         .then(function(response){console.log(response) },function(response){}); })
 
      },function(response){console.log(response)})
@@ -346,7 +346,7 @@ $scope.title=$stateParams;
 $scope.ilang=true;
   $http({
   method: 'GET',
-  url: 'http://plokotok.16mb.com/detailbarang.php',
+  url: 'http://localhost/pengadaanperalatan/webservice/detailbarang.php',
   params: {kode_barang: $stateParams.obj }
 }).then(function successCallback(response) {
   $scope.items=response.data;
@@ -373,7 +373,7 @@ $scope.edit=false;
 $scope.title=$stateParams.obj.tabel;
             break;}
 
-  $http.get('http://plokotok.16mb.com/detailsemua.php', {params: $stateParams.obj })
+  $http.get('http://localhost/pengadaanperalatan/webservice/detailsemua.php', {params: $stateParams.obj })
   .then(function(response){
     $scope.detail=response.data[0];console.log(response.data);  $scope.ilang=true;
       },function(response){})
@@ -397,7 +397,7 @@ $scope.title=$stateParams.obj.tabel;
     $scope.keterangan=$stateParams.obj.keterangan;
     $scope.editlaporan=function(){
     if($scope.data.kondisi != '' ){
-      $http.get('http://plokotok.16mb.com/updatelaporan.php', {params: {id: $stateParams.obj.id,kondisi: $scope.data.kondisi,keterangan: $scope.keterangan}})
+      $http.get('http://localhost/pengadaanperalatan/webservice/updatelaporan.php', {params: {id: $stateParams.obj.id,kondisi: $scope.data.kondisi,keterangan: $scope.keterangan}})
       .then(function(response){
         $ionicHistory.nextViewOptions({
           disableAnimate: false,
@@ -422,7 +422,7 @@ $scope.ilang=true;
 var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).slice(-2)+"-"+("0"+new Date().getDate()).slice(-2);
   var tempat=JSON.parse(window.localStorage.getItem("profile"))[0].nama;
   $scope.refresh=function(){
-  $http.get('http://plokotok.16mb.com/notifikasikeluar.php', {params: {penempatan: tempat}})
+  $http.get('http://localhost/pengadaanperalatan/webservice/notifikasikeluar.php', {params: {penempatan: tempat}})
   .then(function(response){$scope.tanggalakhir=response.data.reverse();$scope.ilang=false; $scope.$broadcast('scroll.refreshComplete');
       },function(response){})}
       $scope.refresh();
@@ -430,7 +430,7 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
     switch(item.jenis.substring(0,8).trim()) {
       case "perminta":
       if(item.status==0){
-        $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
+        $http.get('http://localhost/pengadaanperalatan/webservice/update.php', {params: {tabel: "history",id: item.id}})
         .then(function(response){if(response.data.indexOf("berhasil") > -1){
           $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "permintaan",id: item.idtabel} })
         }
@@ -439,7 +439,7 @@ var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).sli
             break;
             case "laporan":
                 if(item.status==0){
-                  $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: item.id}})
+                  $http.get('http://localhost/pengadaanperalatan/webservice/update.php', {params: {tabel: "history",id: item.id}})
                   .then(function(response){if(response.data.indexOf("berhasil") > -1){
                     $state.go("menu.infopermintaandanjawaban",{obj: {tabel: "laporan_to_admin",id: item.idtabel} })
                   }
