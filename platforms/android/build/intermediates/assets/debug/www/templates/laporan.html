@@ -1,0 +1,26 @@
+<ion-view style="" class=" " id="page3" title="Laporan">
+  <ion-content class="has-header" padding="true" overflow-scroll="false" has-bouncing="true">
+    <form style="" class="list">
+              <label style="" name="kode" class="item item-input">
+                  <h3 >Kode Peralatan</h3>
+                  <span >{{kode_barang}}</span>
+              </label>
+              <label style="" name="penempatan" class="item item-input">
+                  <h3 >Penempatan</h3>
+                  <span >{{penempatan}}</span>
+              </label>
+              <h4 style="color: rgb(0, 0, 0);" id="laporan-heading2">Kondisi</h4>
+              <ion-radio ng-repeat="item in kondisi"
+          ng-value="item.value"
+          ng-model="data.kondisi">
+ {{ item.text }}
+</ion-radio>
+
+              <h4 style="color: rgb(0, 0, 0);" id="laporan-heading3">keterangan</h4>
+              <label style="" name="keterangan"  class="item item-input">
+                <textarea ng-model="$parent.keterangan" placeholder=""> </textarea>
+              </label>
+          </form>
+          <button class="button button-balanced  button-block" ng-click="laporan()" id="laporan-button7">Laporkan</button>
+  </ion-content>
+</ion-view>
