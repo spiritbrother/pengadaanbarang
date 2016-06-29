@@ -1,0 +1,17 @@
+<ion-view style="" class=" " id="infobarang" title="{{title}}">
+<style>
+.jumlah_permintaan,.username_pengirim {margin-right:0 !important;}
+</style>
+<ion-content class="has-header"  padding="true" overflow-scroll="false" has-bouncing="true">
+
+<center><ion-spinner ng-hide="ilang"  icon="android"></ion-spinner></center>
+      <form style="" ng-show="ilang" class="list">
+          <label style="" class="item item-input " ng-repeat="(key,value) in detail">
+              <span class="input-label {{key}}" style="margin-right: 23px;">{{key.replace("_"," ")}}</span>
+              <span>{{value}}</span>
+          </label>
+          <button class="button button-balanced  button-block" ng-click="editlaporan()" id="laporan-button7" ng-show="edit">EDIT LAPORAN</button>
+      </form>
+
+  </ion-content>
+  </ion-view>

@@ -1,0 +1,38 @@
+<ion-view style="" class=" " id="infobarang" title="{{title.obj}}">
+<ion-content class="has-header"  padding="true" overflow-scroll="false" has-bouncing="true">
+
+<center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
+      <form style="" ng-hide="ilang" class="list">
+          <label style="" class="item item-input">
+              <span class="input-label">Kode Barang</span>
+              <span>{{items[0].kode_barang}}</span>
+          </label>
+          <label style="" class="item item-input">
+              <span class="input-label">Nama Barang</span>
+              <span>{{items[0].nama_barang}}</span>
+          </label>
+          <label style="" class="item item-input">
+              <span class="input-label">Penempatan</span>
+              <span>{{items[0].penempatan}}</span>
+          </label>
+                    <label style="" class="item item-input">
+              <span class="input-label">Tanggal Awal</span>
+              <span>{{items[0].tanggal_awal}}</span>
+          </label>
+          <label style="" class="item item-input">
+              <span class="input-label">Tanggal Akhir</span>
+              <span>{{items[0].tanggal_akhir}}</span>
+          </label>
+          <label style="" class="item item-input">
+              <span class="input-label">Tanggal Service</span>
+              <span>{{items[0].tanggal_service}}</span>
+          </label>
+          <label style="" class="item item-input">
+              <span class="input-label">Jenis Barang</span>
+              <span>{{items[0].jenis_barang}}</span>
+          </label>
+            <button class="button button-balanced  button-block" id="infoBarang-button8" ng-click="kembali()">Kembali ke Halaman Utama</button>
+      </form>
+
+  </ion-content>
+  </ion-view>

@@ -1,0 +1,21 @@
+<ion-view hide-nav-bar="false"    style="" class=" " id="page1" title="Peralatan">
+    <ion-content style="background-image:url(http://goo.gl/oKWqVU);" class="has-header" padding="true"  >
+    <center><ion-spinner ng-show="ilang"  icon="android"></ion-spinner></center>
+    <label class="item-input-wrapper item-input">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" ng-model="cari" placeholder="Cari peralatan anda">
+    </label>
+    <ion-refresher
+       pulling-text="Tarik untuk merefresh barang anda..."
+       on-refresh="refresh()"
+      >
+     </ion-refresher>
+    <div class="card"  ng-repeat="item in items | filter:cari " on-tap="onTap(item)" >
+<ion-item  class="item item-text-wrap" >
+        <h2>{{item.kode_barang}}</h2>
+    <p>{{item.nama_barang}}</p>
+    <p>{{item.tanggal_akhir}}</p>
+  </ion-item>
+</div>
+  </ion-content>
+</ion-view>
