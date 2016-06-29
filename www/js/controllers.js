@@ -115,18 +115,18 @@ $http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: ki
     $scope.kode_barang=$stateParams.obj.kode_barang;
     $scope.penempatan=$stateParams.obj.penempatan;
     $scope.idhistory=$stateParams.obj.id;
-    $scope.laporan=$stateParams.obj.laporan;
+    $scope.laporan1=$stateParams.obj.laporan;
     var tanggal=new Date().getFullYear()+"-"+("0" + (new Date().getMonth() + 1)).slice(-2)+"-"+("0"+new Date().getDate()).slice(-2);
       $scope.laporan=function(){
     if($scope.data.kondisi != '' ){
       $ionicLoading.show({
    template: 'Sedang memproses laporan anda'
  })
-      $http.get('http://plokotok.16mb.com/insertlaporan.php', {params: {laporan:$scope.laporan,penempatan: $scope.penempatan,kode_barang: $scope.kode_barang,kondisi: $scope.data.kondisi,username_pengirim: username ,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
+      $http.get('http://plokotok.16mb.com/insertlaporan.php', {params: {laporan:$scope.laporan1,penempatan: $scope.penempatan,kode_barang: $scope.kode_barang,kondisi: $scope.data.kondisi,username_pengirim: username ,keterangan: $scope.keterangan,tanggal: tanggal,status:"Belum Konfirmasi"}})
       .then(function(response){
         var kimbo=response.data;
         var cam=response.data.length-1;
-$http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kodebarang,jenis: "laporan "+$scope.laporan,tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
+$http.get('http://plokotok.16mb.com/inserthistory.php', {params: {penempatan: kimbo[cam].penempatan,kode_barang: kimbo[cam].kodebarang,jenis: "laporan "+$scope.laporan1,tanggal: tanggal, idtabel: kimbo[cam].ID, status: 0 }})
 .then(function(response){console.log(response.data);
 $http.get('http://plokotok.16mb.com/update.php', {params: {tabel: "history",id: $scope.idhistory }})
 .then(function(response){if(response.data.indexOf("berhasil") > -1){
@@ -396,6 +396,7 @@ $scope.title=$stateParams.obj.tabel;
     $scope.kode_barang=$stateParams.obj.kode_barang;
     $scope.penempatan=$stateParams.obj.penempatan;
     $scope.keterangan=$stateParams.obj.keterangan;
+    
     $scope.editlaporan=function(){
     if($scope.data.kondisi != '' ){
       $http.get('http://plokotok.16mb.com/updatelaporan.php', {params: {id: $stateParams.obj.id,kondisi: $scope.data.kondisi,keterangan: $scope.keterangan}})
