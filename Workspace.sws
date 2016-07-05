@@ -4,7 +4,8 @@
 
 <Workspace>
 	<Local Expanded="Yes">
-		<Model Expanded="Yes" ID="{FB7082FA-380C-4541-866F-5CF539E4BE0F}" Name="Physical Data _1" Selected="Yes" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="Physical Data _1.pdm"/>
+		<Model Expanded="Yes" ID="{FB7082FA-380C-4541-866F-5CF539E4BE0F}" Loaded="No" Name="Physical Data _1" Type="{CDE44E21-9669-11D1-9914-006097355D9B}" URL="Physical Data _1.pdm"/>
+		<Model Expanded="Yes" ID="{1D5D3D76-AED8-4B66-8358-2E48DF4905A2}" Loaded="No" Name="Physical Data _1" Type="{1E597170-9350-11D1-AB3C-0020AF71E433}" URL="Physical Data _1.cdm"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
 </Workspace>
