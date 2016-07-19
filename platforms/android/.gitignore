@@ -1,4 +1,4 @@
-# Non-project-specific  files:
+# Non-project-specific build files:
 build.xml
 local.properties
 /gradlew
@@ -10,4 +10,5 @@ ant-gen
 # Eclipse builds
 gen
 out
-# Gradle 
+# Gradle builds
+/build

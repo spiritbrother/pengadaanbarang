@@ -1,10 +1,6 @@
 [
     {
-        "merged": "D:\\proyek bismillah\\pengadaan barang\\platforms\\android\\build\\intermediates\\res\\merged\\debug\\drawable-land-xhdpi-v4\\screen.png",
-        "source": "D:\\proyek bismillah\\pengadaan barang\\platforms\\android\\res\\drawable-land-xhdpi\\screen.png"
-    },
-    {
-        "merged": "D:\\proyek bismillah\\cat\\platforms\\android\\build\\intermediates\\res\\merged\\debug\\drawable-land-xhdpi-v4\\screen.png",
-        "source": "D:\\proyek bismillah\\cat\\platforms\\android\\res\\drawable-land-xhdpi\\screen.png"
+        "merged": "D:\\pengadaanbarang\\platforms\\android\\build\\intermediates\\res\\merged\\debug\\drawable-land-xhdpi-v4\\screen.png",
+        "source": "D:\\pengadaanbarang\\platforms\\android\\res\\drawable-land-xhdpi\\screen.png"
     }
 ]

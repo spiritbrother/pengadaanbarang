@@ -251,7 +251,7 @@ if(response.data.length!=0){
     .then(function(response){console.log(response.data)
       var berakhir = a.filter(function(current){
           return response.data.filter(function(current_b){
-              return current_b.penempatan == current.penempatan && current_b.kode_barang == current.kode_barang && current_b.jenis == current.jenis && current_b.tanggal == current.tanggal && current_b.idtabel == current.idtabel
+              return current_b.penempatan == current.penempatan && current_b.kode_barang == current.kode_barang && current_b.jenis == current.jenis  && current_b.idtabel == current.idtabel
           }).length == 0
       });
       angular.forEach(berakhir,function(value){
@@ -286,7 +286,7 @@ if(response.data.length!=0){
     .then(function(response){console.log(response.data)
       var berakhir = b.filter(function(current){
           return response.data.filter(function(current_b){
-              return current_b.penempatan == current.penempatan && current_b.kode_barang == current.kode_barang && current_b.jenis == current.jenis && current_b.tanggal == current.tanggal && current_b.idtabel == current.idtabel
+              return current_b.penempatan == current.penempatan && current_b.kode_barang == current.kode_barang && current_b.jenis == current.jenis &&  current_b.idtabel == current.idtabel
           }).length == 0
       });
       angular.forEach(berakhir,function(value){
@@ -321,7 +321,7 @@ if(response.data.length!=0){
     .then(function(response){console.log(response.data)
       var berakhir = c.filter(function(current){
           return response.data.filter(function(current_b){
-              return current_b.penempatan == current.penempatan && current_b.kode_barang == current.kode_barang && current_b.jenis == current.jenis && current_b.tanggal == current.tanggal && current_b.idtabel == current.idtabel
+              return current_b.penempatan == current.penempatan && current_b.kode_barang == current.kode_barang && current_b.jenis == current.jenis  && current_b.idtabel == current.idtabel
           }).length == 0
       });
       angular.forEach(berakhir,function(value){
