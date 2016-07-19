@@ -11,7 +11,7 @@ angular.module('app.routes', [])
   $stateProvider
 
 
-
+//untuk pergi ke page barang dengan side menu
       .state('menu.barang', {
     url: '/barang',
     views: {
@@ -21,7 +21,7 @@ angular.module('app.routes', [])
       }
     }
   })
-
+//untuk pergi ke page permintaan dengan side menu
   .state('menu.permintaan', {
     url: '/page2',
     views: {
@@ -31,6 +31,7 @@ angular.module('app.routes', [])
       }
     }
   })
+  //untuk pergi ke page info permintaan,jawaban,service,dan expired yang sudah kita lakukan
   .state('menu.infopermintaandanjawaban', {
     url: '/page2',
     views: {
@@ -43,6 +44,7 @@ angular.module('app.routes', [])
             obj: null
         }
   })
+  //page notifikasi masuk
   .state('menu.notifikasi', {
     url: '/page3',
     views: {
@@ -52,6 +54,7 @@ angular.module('app.routes', [])
       }
     }
   })
+  //page notifikasi keluar
   .state('menu.notifikasikeluar', {
     url: '/notifikasikeluar',
     views: {
@@ -61,6 +64,7 @@ angular.module('app.routes', [])
       }
     }
   })
+  //page edit laporan yang salah
   .state('menu.editlaporan', {
     url: '/editlaporan',
     views: {
@@ -73,6 +77,7 @@ angular.module('app.routes', [])
             obj: null
         }
   })
+  //page info barang
   .state('menu.infobarang', {
     url: '/infobarang',
     views: {
@@ -85,17 +90,19 @@ angular.module('app.routes', [])
             obj: null
         }
   })
+  //side menu disamping
   .state('menu', {
     url: '/side-menu21',
     templateUrl: 'templates/menu.html',
     abstract:true
   })
+  //page login
     .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
     controller: 'loginCtrl'
   })
-
+//page laporan
   .state('menu.laporan', {
     url: '/laporan',
     views: {
@@ -109,7 +116,7 @@ angular.module('app.routes', [])
         }
   })
 
-
+//page awal masuk ke android 
 $urlRouterProvider.otherwise('/login')
 
 
